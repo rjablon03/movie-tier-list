@@ -1,8 +1,11 @@
 import './App.css'
+import { Container } from './Components'
 
 function App() {
   return (
-    <div className="placeholder">Hey!</div>
+    <>
+      <Container />
+    </>
   )
 }
 
