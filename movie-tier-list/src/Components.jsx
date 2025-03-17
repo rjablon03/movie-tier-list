@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 const data = [
     {
         name: "Interstellar",
@@ -59,12 +61,32 @@ function Container() {
 }
 
 function Category(props) {
+    const [movies, setMovies] = useState(data.filter(movie => movie.rank === props.label))
+
     return (
         <div className="category-container">
             <div className={"label label-" + props.label}>{props.label}</div>
             <div className="items">
-
+                {movies.map(movie => (
+                        <MovieCard
+                            key={movie.name}
+                            name={movie.name}
+                            director={movie.director}
+                            year={movie.year} 
+                        />
+                    ))}
             </div>
+        </div>
+    )
+}
+
+function MovieCard(props) {
+    return (
+        <div className="card">
+            <p>{props.name}</p>
+            <p>{props.director}</p>
+            <p>{props.year}</p>
+            <button className="edit">Edit</button>
         </div>
     )
 }

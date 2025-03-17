@@ -66,4 +66,27 @@ body {
     background-color: #000000;
     height: 90px;
     width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.items .card:first-child {
+    margin-left: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    width: fit-content;
+    height: 80px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.edit {
+    height: 20px;
+    width: 40px;
+    border-radius: 5px;
+    background-color: #323232;
+    color: #ffffff;
 }
