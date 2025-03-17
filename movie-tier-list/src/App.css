@@ -83,10 +83,28 @@ body {
     border-radius: 5px;
 }
 
-.edit {
+button {
     height: 20px;
     width: 40px;
     border-radius: 5px;
     background-color: #323232;
     color: #ffffff;
+}
+
+#submit {
+    width: 60px;
+    margin-top: 15px;
+}
+
+input {
+    display: block;
+    border: #323232 2px solid;
+}
+
+.create-form {
+    background-color: #ffffff;
+    width: 10%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
 }

@@ -46,38 +46,33 @@ const data = [
 ]
 
 function Container() {
+    const [movies, setMovies] = useState(data)
+
     return (
         <>
             <div className="container">
-                <Category label="S"/>
-                <Category label="A"/>
-                <Category label="B"/>
-                <Category label="C"/>
-                <Category label="D"/>
-                <Category label="E"/>
+                {["S", "A", "B", "C", "D", "E"].map(rank => (
+                    <Category key={rank} label={rank} movies={movies} />
+                ))}
             </div>
+            <CreateCard setMovies={setMovies} />
         </>
-    )
+    );
 }
 
-function Category(props) {
-    const [movies, setMovies] = useState(data.filter(movie => movie.rank === props.label))
+function Category({ label, movies }) {
+    const rankedMovies = movies.filter(movie => movie.rank === label);
 
     return (
         <div className="category-container">
-            <div className={"label label-" + props.label}>{props.label}</div>
+            <div className={"label label-" + label}>{label}</div>
             <div className="items">
-                {movies.map(movie => (
-                        <MovieCard
-                            key={movie.name}
-                            name={movie.name}
-                            director={movie.director}
-                            year={movie.year} 
-                        />
-                    ))}
+                {rankedMovies.map((movie, index) => (
+                    <MovieCard key={index} name={movie.name} director={movie.director} year={movie.year} />
+                ))}
             </div>
         </div>
-    )
+    );
 }
 
 function MovieCard(props) {
@@ -86,7 +81,53 @@ function MovieCard(props) {
             <p>{props.name}</p>
             <p>{props.director}</p>
             <p>{props.year}</p>
-            <button className="edit">Edit</button>
+            <button>Edit</button>
+        </div>
+    )
+}
+
+function CreateCard({setMovies}) {
+    const create = (event) => {
+        event.preventDefault();
+    
+        const formData = new FormData(event.target);
+        const newMovie = {
+            name: formData.get("name"),
+            director: formData.get("director"),
+            year: formData.get("year"),
+            rank: formData.get("rank")
+        };
+    
+        setMovies(prevMovies => [...prevMovies, newMovie]);
+    
+        event.target.reset();
+    };
+    
+
+    return (
+        <div className="create-form">
+            <form onSubmit={create}>
+                <label htmlFor="name">Name</label>
+                <input type="text" name="name" id="name" />
+
+                <label htmlFor="director">Director</label>
+                <input type="text" name="director" id="director" />
+
+                <label htmlFor="year">Year</label>
+                <input type="number" name="year" id="year" />
+
+                <label htmlFor="rank">Rank</label>
+                <select name="rank" id="rank">
+                    <option value="S">S</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                </select>
+
+                <button type="submit" id="submit">Create</button>
+            </form>
         </div>
     )
 }
