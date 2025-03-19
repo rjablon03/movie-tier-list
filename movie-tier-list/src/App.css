@@ -89,11 +89,17 @@ button {
     border-radius: 5px;
     background-color: #323232;
     color: #ffffff;
+    cursor: pointer;
 }
 
 #submit {
     width: 60px;
     margin-top: 15px;
+}
+
+#delete {
+    width: 60px;
+    margin-left: 3px;
 }
 
 input {

@@ -52,7 +52,7 @@ function Container() {
         <>
             <div className="container">
                 {["S", "A", "B", "C", "D", "E"].map(rank => (
-                    <Category key={rank} label={rank} movies={movies} />
+                    <Category key={rank} label={rank} movies={movies} setMovies={setMovies}/>
                 ))}
             </div>
             <CreateCard setMovies={setMovies} />
@@ -60,28 +60,39 @@ function Container() {
     );
 }
 
-function Category({ label, movies }) {
-    const rankedMovies = movies.filter(movie => movie.rank === label);
+function Category({ label, movies, setMovies }) {
+    const filteredMovies = movies.filter(movie => movie.rank === label);
 
     return (
         <div className="category-container">
             <div className={"label label-" + label}>{label}</div>
             <div className="items">
-                {rankedMovies.map((movie, index) => (
-                    <MovieCard key={index} name={movie.name} director={movie.director} year={movie.year} />
+                {filteredMovies.map((movie) => (
+                    <MovieCard
+                        key={movie.name}
+                        name={movie.name}
+                        director={movie.director}
+                        year={movie.year}
+                        setMovies={setMovies}
+                    />
                 ))}
             </div>
         </div>
     );
 }
 
-function MovieCard(props) {
+function MovieCard({ name, director, year, setMovies }) {
+    const deleteCard = () => {
+        setMovies(prevMovies => prevMovies.filter(movie => movie.name !== name));
+    };
+
     return (
         <div className="card">
-            <p>{props.name}</p>
-            <p>{props.director}</p>
-            <p>{props.year}</p>
+            <p>{name}</p>
+            <p>{director}</p>
+            <p>{year}</p>
             <button>Edit</button>
+            <button id="delete" onClick={deleteCard}>Delete</button>
         </div>
     )
 }
