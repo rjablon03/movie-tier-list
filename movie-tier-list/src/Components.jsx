@@ -91,7 +91,7 @@ function MovieCard({ name, director, year, setMovies }) {
             <p>{name}</p>
             <p>{director}</p>
             <p>{year}</p>
-            <button>Edit</button>
+            <button id="edit">Edit</button>
             <button id="delete" onClick={deleteCard}>Delete</button>
         </div>
     )
