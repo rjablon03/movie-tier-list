@@ -46,7 +46,7 @@ const data = [
 ]
 
 function Container() {
-    const [movies, setMovies] = useState(data)
+    const [movies, setMovies] = useState(data.map((movie, index) => ({...movie, id: index})));
 
     return (
         <>
@@ -55,7 +55,7 @@ function Container() {
                     <Category key={rank} label={rank} movies={movies} setMovies={setMovies}/>
                 ))}
             </div>
-            <CreateCard setMovies={setMovies} />
+            <CreateCard movies={movies} setMovies={setMovies} />
         </>
     );
 }
@@ -70,6 +70,7 @@ function Category({ label, movies, setMovies }) {
                 {filteredMovies.map((movie) => (
                     <MovieCard
                         key={movie.name}
+                        id={movie.id}
                         name={movie.name}
                         director={movie.director}
                         year={movie.year}
@@ -81,28 +82,55 @@ function Category({ label, movies, setMovies }) {
     );
 }
 
-function MovieCard({ name, director, year, setMovies }) {
+function MovieCard({ id, name, director, year, setMovies }) {
+    const [editing, setEditing] = useState(false);
+    const [newName, setNewName] = useState(name);
+    const [newDirector, setNewDirector] = useState(director);
+    const [newYear, setNewYear] = useState(year);
+
     const deleteCard = () => {
-        setMovies(prevMovies => prevMovies.filter(movie => movie.name !== name));
+        setMovies(prevMovies => prevMovies.filter(movie => movie.id !== id));
+    };
+
+    const saveChanges = () => {
+        setMovies(prevMovies =>
+            prevMovies.map(movie =>
+                movie.id === id ? { ...movie, name: newName, director: newDirector, year: newYear } : movie
+            )
+        );
+        setEditing(false);
     };
 
     return (
         <div className="card">
-            <p>{name}</p>
-            <p>{director}</p>
-            <p>{year}</p>
-            <button id="edit">Edit</button>
-            <button id="delete" onClick={deleteCard}>Delete</button>
+            {editing ? (
+                <>
+                    <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} />
+                    <input type="text" value={newDirector} onChange={(e) => setNewDirector(e.target.value)} />
+                    <input type="text" value={newYear} onChange={(e) => setNewYear(e.target.value)} />
+                    <button className="other-btns" onClick={saveChanges}>Save</button>
+                    <button className="other-btns" onClick={() => setEditing(false)}>Cancel</button>
+                </>
+            ) : (
+                <>
+                    <p>{name}</p>
+                    <p>{director}</p>
+                    <p>{year}</p>
+                    <button className="other-btns" id="edit" onClick={() => setEditing(true)}>Edit</button>
+                    <button className="other-btns" onClick={deleteCard}>Delete</button>
+                </>
+            )}
         </div>
-    )
+    );
 }
 
-function CreateCard({setMovies}) {
+function CreateCard({movies, setMovies}) {
     const create = (event) => {
         event.preventDefault();
     
         const formData = new FormData(event.target);
         const newMovie = {
+            id: movies.length,
             name: formData.get("name"),
             director: formData.get("director"),
             year: formData.get("year"),
@@ -114,7 +142,6 @@ function CreateCard({setMovies}) {
         event.target.reset();
     };
     
-
     return (
         <div className="create-form">
             <form onSubmit={create}>
