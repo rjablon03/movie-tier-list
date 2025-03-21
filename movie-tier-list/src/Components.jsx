@@ -46,7 +46,7 @@ const data = [
 ]
 
 function Container() {
-    const [movies, setMovies] = useState(data.map((movie, index) => ({...movie, id: index})));
+    const [movies, setMovies] = useState(data.map((movie, index) => ({...movie, id: movie.name + toString(index)})));
 
     return (
         <>
